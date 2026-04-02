@@ -4,6 +4,7 @@ import torch
 import torch.distributed as dist
 
 from .ops import fast_exp_action, polar
+from .fuse_ops import update_fused
 
 
 class SOOptimizer:
@@ -90,7 +91,8 @@ class SOOptimizer:
 
         x = x.reshape(-1, self.orth_dim, self.dim)
         update = update.reshape_as(x)
-        new_x = fast_exp_action(x, update)
+        # new_x = fast_exp_action(x, update)
+        new_x = update_fused(x, update)
 
         if is_last and self.project_last:
             new_x = polar(new_x)
