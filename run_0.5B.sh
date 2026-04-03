@@ -6,7 +6,7 @@ SUB_MATRIX=${2:-1}
 
 LR=${3:-2e-4}
 MIN_LR=${4:-2e-5}
-SO_LR=${5:-0.5}
+SO_LR=${5:-1.0}
 
 OMP_NUM_THREADS=1 torchrun \
     --nproc_per_node 8 \
