@@ -178,7 +178,7 @@ class ChunkedMLP(nn.Module):
     def forward(self, x: torch.Tensor, weights: torch.Tensor) -> torch.Tensor:
         w1_rcc, w2_rcc = torch.split(weights, [self.r, self.r], dim=0)
         w1 = w1_rcc.reshape(self.r * self.hidden_size, self.hidden_size)
-        w2 = w2_rcc.permute(1, 0, 2).reshape(self.hidden_size, self.r * self.hidden_size)
+        w2 = w2_rcc.reshape(self.r * self.hidden_size, self.hidden_size).T
 
         x = F.linear(x, w1)
         x = F.silu(x)
