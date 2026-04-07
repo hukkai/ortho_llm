@@ -339,7 +339,8 @@ class ChunkedLlamaForCausalLMBase(nn.Module):
         x = self.embed_tokens(input_ids)
         cos, sin = self.rotary_emb(x.shape[1], device=x.device, dtype=x.dtype)
 
-        chunk_norm = self.chunk_norm1 + self.chunk_norm2 + 1
+        chunk_norm = self.chunk_norm1.float().exp() + self.chunk_norm2.float().exp()
+        chunk_norm = (chunk_norm - 1).to(self.chunk_weights.dtype)
         block_weights = (self.chunk_weights * chunk_norm).reshape(
             len(self.layers), self.num_matrix, self.hidden_size, self.hidden_size
         )
