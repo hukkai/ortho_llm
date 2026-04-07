@@ -307,8 +307,8 @@ class ChunkedLlamaForCausalLMBase(nn.Module):
         self.chunk_weights = nn.Parameter(
             torch.randn(total_chunks, hidden_size, hidden_size) / hidden_size ** .5
         )
-        self.chunk_affine1 = nn.Parameter(torch.zeros(total_chunks, hidden_size, 1))
-        self.chunk_affine2 = nn.Parameter(torch.zeros(total_chunks, 1, hidden_size))
+        self.chunk_norm1 = nn.Parameter(torch.zeros(total_chunks, hidden_size, 1))
+        self.chunk_norm2 = nn.Parameter(torch.zeros(total_chunks, 1, hidden_size))
 
         self.apply(self._init_weights)
         self._init_chunk_weights()
@@ -339,8 +339,8 @@ class ChunkedLlamaForCausalLMBase(nn.Module):
         x = self.embed_tokens(input_ids)
         cos, sin = self.rotary_emb(x.shape[1], device=x.device, dtype=x.dtype)
 
-        chunk_affine = self.chunk_affine1 + self.chunk_affine2 + 1
-        block_weights = (self.chunk_weights * chunk_affine).reshape(
+        chunk_norm = self.chunk_norm1 + self.chunk_norm2 + 1
+        block_weights = (self.chunk_weights * chunk_norm).reshape(
             len(self.layers), self.num_matrix, self.hidden_size, self.hidden_size
         )
 
