@@ -208,6 +208,12 @@ def main() -> None:
             orth_opt.step(lr=lr * args.so_lr, is_last=is_last_step)
 
         optimizer.step()
+
+        module = model.module if hasattr(model, "module") else model
+        if hasattr(module, "chunk_norm1"):
+            module.chunk_norm1.data.clamp_(-5.0, 5.0)
+            module.chunk_norm2.data.clamp_(-5.0, 5.0)
+
         optimizer.zero_grad(set_to_none=True)
 
         completed_step = step + 1
