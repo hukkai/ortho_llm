@@ -16,12 +16,12 @@ OMP_NUM_THREADS=1 torchrun \
     --num-layers 18 \
     --hidden-size 1536 \
     --num-heads 24 \
-    --batch-size 4 \
+    --batch-size 16 \
     --global-batch-size 512 \
     --seq-length 2048 \
     --lr $LR \
     --min-lr $MIN_LR \
     --so-lr $SO_LR \
-    --num-steps 10_000 \
+    --num-steps 50_000 \
     --orthogonal-type "${ORTH_TYPE}" \
     --sub-matrix "${SUB_MATRIX}"
