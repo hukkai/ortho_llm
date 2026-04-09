@@ -1,6 +1,6 @@
 import torch
 
-from ops import polar as exact_polar
+from .ops import polar as exact_polar
 
 
 TAYLOR2_MAX_ERR = 0.06
