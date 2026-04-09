@@ -39,6 +39,7 @@ class LlamaConfig:
         return self.hidden_size * self.mlp_ratio
 
 
+"""
 class RMSNorm(nn.Module):
     def __init__(self, hidden_size: int, eps: float = 1e-6) -> None:
         super().__init__()
@@ -49,7 +50,9 @@ class RMSNorm(nn.Module):
         x_float = x.float()
         normed = x_float * torch.rsqrt(x_float.pow(2).mean(dim=-1, keepdim=True) + self.eps)
         return (normed.to(dtype=x.dtype) * self.weight).to(dtype=x.dtype)
+"""
 
+RMSNorm = nn.LayerNorm
 
 class RotaryEmbedding(nn.Module):
     def __init__(self, dim: int, base: float = 10000.0) -> None:
