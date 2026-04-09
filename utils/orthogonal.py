@@ -3,9 +3,9 @@ from __future__ import annotations
 import torch
 import torch.distributed as dist
 
-from .ops import fast_exp_action, polar
-from .fuse_ops import update_fused
-
+from .ops import polar #, fast_exp_action
+#from .fuse_ops import update_fused
+from .polar_taylor import stiefel_update_taylor
 
 class SOOptimizer:
     def __init__(
@@ -92,7 +92,8 @@ class SOOptimizer:
         x = x.reshape(-1, self.orth_dim, self.dim)
         update = update.reshape_as(x)
         # new_x = fast_exp_action(x, update)
-        new_x = update_fused(x, update)
+        # new_x = update_fused(x, update)
+        new_x = stiefel_update_taylor(x, update)
 
         if is_last and self.project_last:
             new_x = polar(new_x)
