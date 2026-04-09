@@ -161,10 +161,12 @@ class MLP(nn.Module):
         self.dropout = nn.Dropout(config.hidden_dropout)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        x = self.fc1(x)
+        # x = self.fc1(x)
+        x = F.linear(x, F.normalize(self.fc1.weight, dim=1))
         x = F.silu(x)
         x = self.dropout(x)
-        x = self.fc2(x)
+        # x = self.fc2(x)
+        x = F.linear(x, F.normalize(self.fc2.weight, dim=0))
         return self.dropout(x)
 
 
